@@ -31,5 +31,11 @@ void cmocka_test_abort(const char *file, int line);
 #define abort() cmocka_test_abort(__FILE__, __LINE__)
 extern bool abort_is_overridden;
 
+int cmocka_test_posix_memalign(void **out, size_t alignment, size_t size,
+                               const char *file, int line);
+#define posix_memalign(out, alignment, size) \
+    cmocka_test_posix_memalign(out, alignment, size, __FILE__, __LINE__)
+extern bool posix_memalign_is_overridden;
+
 #endif /* TEST */
 #endif /* _CMOCKA_TEST_CMOCKA_STDLIB_H_ */

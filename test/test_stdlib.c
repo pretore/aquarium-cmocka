@@ -3,6 +3,7 @@
 #include <setjmp.h>
 #include <cmocka.h>
 #include <string.h>
+#include <errno.h>
 
 #include <test/cmocka/stdlib.h>
 
@@ -60,6 +61,22 @@ static void check_abort(void **state) {
     abort_is_overridden = false;
 }
 
+static void check_posix_memalign_error_on_invalid_alignment(void **state) {
+    assert_int_equal(posix_memalign((void *)1, 1, sizeof(void *)), EINVAL);
+}
+
+static void check_posix_memalign(void **state) {
+    void *data = NULL;
+    assert_int_equal(posix_memalign(&data, sizeof(void *), sizeof(void *)), 0);
+    assert_non_null(data);
+    free(data);
+
+    posix_memalign_is_overridden = true;
+    assert_int_equal(posix_memalign(&data, sizeof(void *), sizeof(void *)),
+                     ENOMEM);
+    posix_memalign_is_overridden = false;
+}
+
 int main(int argc, char *argv[]) {
     const struct CMUnitTest tests[] = {
             cmocka_unit_test(check_malloc),
@@ -67,6 +84,9 @@ int main(int argc, char *argv[]) {
             cmocka_unit_test(check_realloc_with_null),
             cmocka_unit_test(check_realloc),
             cmocka_unit_test(check_abort),
+            cmocka_unit_test(check_posix_memalign_error_on_invalid_alignment),
+            cmocka_unit_test(check_posix_memalign),
+
     };
     //cmocka_set_message_output(CM_OUTPUT_XML);
     return cmocka_run_group_tests(tests, NULL, NULL);
