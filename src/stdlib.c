@@ -6,7 +6,7 @@
 
 #include <test/cmocka/stdlib.h>
 
-bool _Thread_local malloc_is_overridden = false;
+_Thread_local bool malloc_is_overridden = false;
 
 void *cmocka_test_malloc(const size_t size, const char *file, const int line) {
     if (malloc_is_overridden) {
@@ -15,7 +15,7 @@ void *cmocka_test_malloc(const size_t size, const char *file, const int line) {
     return _test_malloc(size, file, line);
 }
 
-bool _Thread_local calloc_is_overridden = false;
+_Thread_local bool calloc_is_overridden = false;
 
 void *cmocka_test_calloc(const size_t nmemb, const size_t size,
                          const char *file, const int line) {
@@ -25,7 +25,7 @@ void *cmocka_test_calloc(const size_t nmemb, const size_t size,
     return _test_calloc(nmemb, size, file, line);
 }
 
-bool _Thread_local realloc_is_overridden = false;
+_Thread_local bool realloc_is_overridden = false;
 
 void *cmocka_test_realloc(void *ptr, const size_t size, const char *file,
                           const int line) {
@@ -40,7 +40,7 @@ void cmocka_test_free(void *ptr, const char *file, const int line) {
 }
 
 #undef abort
-bool _Thread_local abort_is_overridden = false;
+_Thread_local bool abort_is_overridden = false;
 
 void cmocka_test_abort(const char *file, const int line) {
     if (abort_is_overridden) {
@@ -50,7 +50,7 @@ void cmocka_test_abort(const char *file, const int line) {
     }
 }
 
-bool _Thread_local posix_memalign_is_overridden = false;
+_Thread_local bool posix_memalign_is_overridden = false;
 
 int cmocka_test_posix_memalign(void **const out,
                                const size_t alignment,

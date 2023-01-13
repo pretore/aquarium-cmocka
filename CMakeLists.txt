@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(aquarium-cmocka VERSION 1.2.0
+project(aquarium-cmocka VERSION 1.3.0
         LANGUAGES C
         DESCRIPTION "aquarium test harness")
 
@@ -17,12 +17,14 @@ include(cmake/FetchCMocka.cmake)
 set(EXPORTED_HEADER_FILES
         include/test/cmocka/pthread.h
         include/test/cmocka/stdlib.h
+        include/test/cmocka/time.h
         include/test/cmocka.h)
 set(SOURCES
         ${EXPORTED_HEADER_FILES}
         src/cmocka.c
         src/pthread.c
-        src/stdlib.c)
+        src/stdlib.c
+        src/time.c)
 
 if (DOXYGEN_FOUND)
     set(DOXYGEN_EXTRACT_ALL YES)
@@ -34,6 +36,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     include(CTest)
     add_library(${PROJECT_NAME} STATIC "")
     add_compile_definitions(TEST)
+    add_compile_definitions(_GNU_SOURCE)
     target_sources(${PROJECT_NAME}
             PRIVATE
                 ${SOURCES})
@@ -75,4 +78,13 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
                 ${PROJECT_NAME})
     add_test(${PROJECT_NAME}-pthread-unit-test
             ${PROJECT_NAME}-pthread-unit-test)
+    # aquarium-cmocka-time-unit-test
+    add_executable(${PROJECT_NAME}-time-unit-test test/test_time.c)
+    target_include_directories(${PROJECT_NAME}-time-unit-test
+            PRIVATE
+                "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>")
+    target_link_libraries(${PROJECT_NAME}-time-unit-test
+            PRIVATE
+                ${PROJECT_NAME})
+    add_test(${PROJECT_NAME}-time-unit-test ${PROJECT_NAME}-time-unit-test)
 endif ()

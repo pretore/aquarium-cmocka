@@ -1,5 +1,3 @@
-#define _GNU_SOURCE
-
 #include <stdarg.h>
 #include <stddef.h>
 #include <setjmp.h>
@@ -8,7 +6,7 @@
 
 #include <test/cmocka/pthread.h>
 
-bool _Thread_local pthread_mutex_init_is_overridden = false;
+_Thread_local bool pthread_mutex_init_is_overridden = false;
 
 int cmocka_test_pthread_mutex_init(pthread_mutex_t *restrict mutex,
                                    const pthread_mutexattr_t *attr,
@@ -25,7 +23,7 @@ int cmocka_test_pthread_mutex_init(pthread_mutex_t *restrict mutex,
     return func(mutex, attr);
 }
 
-bool _Thread_local pthread_mutex_destroy_is_overridden = false;
+_Thread_local bool pthread_mutex_destroy_is_overridden = false;
 
 int cmocka_test_pthread_mutex_destroy(pthread_mutex_t *mutex,
                                       const char *file, int line) {
@@ -41,7 +39,7 @@ int cmocka_test_pthread_mutex_destroy(pthread_mutex_t *mutex,
     return func(mutex);
 }
 
-bool _Thread_local pthread_mutex_lock_is_overridden = false;
+_Thread_local bool pthread_mutex_lock_is_overridden = false;
 
 int cmocka_test_pthread_mutex_lock(pthread_mutex_t *mutex,
                                    const char *file, int line) {
@@ -57,7 +55,7 @@ int cmocka_test_pthread_mutex_lock(pthread_mutex_t *mutex,
     return func(mutex);
 }
 
-bool _Thread_local pthread_mutex_trylock_is_overridden = false;
+_Thread_local bool pthread_mutex_trylock_is_overridden = false;
 
 int cmocka_test_pthread_mutex_trylock(pthread_mutex_t *mutex,
                                       const char *file, int line) {
@@ -73,7 +71,7 @@ int cmocka_test_pthread_mutex_trylock(pthread_mutex_t *mutex,
     return func(mutex);
 }
 
-bool _Thread_local pthread_mutex_unlock_is_overridden = false;
+_Thread_local bool pthread_mutex_unlock_is_overridden = false;
 
 int cmocka_test_pthread_mutex_unlock(pthread_mutex_t *mutex,
                                      const char *file, int line) {
@@ -89,7 +87,7 @@ int cmocka_test_pthread_mutex_unlock(pthread_mutex_t *mutex,
     return func(mutex);
 }
 
-bool _Thread_local pthread_rwlock_init_is_overridden = false;
+_Thread_local bool pthread_rwlock_init_is_overridden = false;
 
 int cmocka_test_pthread_rwlock_init(pthread_rwlock_t *restrict rwlock,
                                     const pthread_rwlockattr_t *attr,
@@ -106,7 +104,7 @@ int cmocka_test_pthread_rwlock_init(pthread_rwlock_t *restrict rwlock,
     return func(rwlock, attr);
 }
 
-bool _Thread_local pthread_rwlock_destroy_is_overridden = false;
+_Thread_local bool pthread_rwlock_destroy_is_overridden = false;
 
 int cmocka_test_pthread_rwlock_destroy(pthread_rwlock_t *rwlock,
                                        const char *file, int line) {
@@ -122,7 +120,7 @@ int cmocka_test_pthread_rwlock_destroy(pthread_rwlock_t *rwlock,
     return func(rwlock);
 }
 
-bool _Thread_local pthread_rwlock_rdlock_is_overridden = false;
+_Thread_local bool pthread_rwlock_rdlock_is_overridden = false;
 
 int cmocka_test_pthread_rwlock_rdlock(pthread_rwlock_t *rwlock,
                                       const char *file, int line) {
@@ -138,7 +136,7 @@ int cmocka_test_pthread_rwlock_rdlock(pthread_rwlock_t *rwlock,
     return func(rwlock);
 }
 
-bool _Thread_local pthread_rwlock_tryrdlock_is_overridden = false;
+_Thread_local bool pthread_rwlock_tryrdlock_is_overridden = false;
 
 int cmocka_test_pthread_rwlock_tryrdlock(pthread_rwlock_t *rwlock,
                                          const char *file, int line) {
@@ -154,7 +152,7 @@ int cmocka_test_pthread_rwlock_tryrdlock(pthread_rwlock_t *rwlock,
     return func(rwlock);
 }
 
-bool _Thread_local pthread_rwlock_wrlock_is_overridden = false;
+_Thread_local bool pthread_rwlock_wrlock_is_overridden = false;
 
 int cmocka_test_pthread_rwlock_wrlock(pthread_rwlock_t *rwlock,
                                       const char *file, int line) {
@@ -170,7 +168,7 @@ int cmocka_test_pthread_rwlock_wrlock(pthread_rwlock_t *rwlock,
     return func(rwlock);
 }
 
-bool _Thread_local pthread_rwlock_trywrlock_is_overridden = false;
+_Thread_local bool pthread_rwlock_trywrlock_is_overridden = false;
 
 int cmocka_test_pthread_rwlock_trywrlock(pthread_rwlock_t *rwlock,
                                          const char *file, int line) {
@@ -186,7 +184,7 @@ int cmocka_test_pthread_rwlock_trywrlock(pthread_rwlock_t *rwlock,
     return func(rwlock);
 }
 
-bool _Thread_local pthread_rwlock_unlock_is_overridden = false;
+_Thread_local bool pthread_rwlock_unlock_is_overridden = false;
 
 int cmocka_test_pthread_rwlock_unlock(pthread_rwlock_t *rwlock,
                                       const char *file, int line) {

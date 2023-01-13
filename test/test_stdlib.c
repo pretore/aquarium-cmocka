@@ -2,7 +2,6 @@
 #include <stddef.h>
 #include <setjmp.h>
 #include <cmocka.h>
-#include <string.h>
 #include <errno.h>
 
 #include <test/cmocka/stdlib.h>

@@ -33,6 +33,7 @@ extern _Thread_local bool abort_is_overridden;
 
 int cmocka_test_posix_memalign(void **out, size_t alignment, size_t size,
                                const char *file, int line);
+
 #define posix_memalign(out, alignment, size) \
     cmocka_test_posix_memalign(out, alignment, size, __FILE__, __LINE__)
 extern _Thread_local bool posix_memalign_is_overridden;
