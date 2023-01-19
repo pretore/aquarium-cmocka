@@ -96,5 +96,51 @@ int cmocka_test_pthread_rwlock_unlock(pthread_rwlock_t *rwlock,
     cmocka_test_pthread_rwlock_unlock(rwlock, __FILE__, __LINE__)
 extern _Thread_local bool pthread_rwlock_unlock_is_overridden;
 
+int cmocka_test_pthread_cond_init(pthread_cond_t *restrict cond,
+                                  pthread_condattr_t *restrict attr,
+                                  const char *file, int line);
+
+#define pthread_cond_init(cond, attr) \
+    cmocka_test_pthread_cond_init(cond, attr, __FILE__, __LINE__)
+extern _Thread_local bool pthread_cond_init_is_overridden;
+
+int cmocka_test_pthread_cond_destroy(pthread_cond_t *cond,
+                                     const char *file, int line);
+
+#define pthread_cond_destroy(cond) \
+    cmocka_test_pthread_cond_destroy(cond, __FILE__, __LINE__)
+extern _Thread_local bool pthread_cond_destroy_is_overridden;
+
+int cmocka_test_pthread_cond_wait(pthread_cond_t *restrict cond,
+                                  pthread_mutex_t *restrict mutex,
+                                  const char *file, int line);
+
+#define pthread_cond_wait(cond, mutex) \
+    cmocka_test_pthread_cond_wait(cond, mutex, __FILE__, __LINE__)
+extern _Thread_local bool pthread_cond_wait_is_overridden;
+
+int cmocka_test_pthread_cond_timedwait(pthread_cond_t *restrict cond,
+                                       pthread_mutex_t *restrict mutex,
+                                       const struct timespec *restrict abstime,
+                                       const char *file, int line);
+
+#define pthread_cond_timedwait(cond, mutex, abstime) \
+    cmocka_test_pthread_cond_timedwait(cond, mutex, abstime, __FILE__, __LINE__)
+extern _Thread_local bool pthread_cond_timedwait_is_overridden;
+
+int cmocka_test_pthread_cond_broadcast(pthread_cond_t *cond,
+                                       const char *file, int line);
+
+#define pthread_cond_broadcast(cond) \
+    cmocka_test_pthread_cond_broadcast(cond, __FILE__, __LINE__)
+extern _Thread_local bool pthread_cond_broadcast_is_overridden;
+
+int cmocka_test_pthread_cond_signal(pthread_cond_t *cond,
+                                    const char *file, int line);
+
+#define pthread_cond_signal(cond) \
+    cmocka_test_pthread_cond_signal(cond, __FILE__, __LINE__)
+extern _Thread_local bool pthread_cond_signal_is_overridden;
+
 #endif /* TEST */
 #endif /* _CMOCKA_TEST_CMOCKA_PTHREAD_H_ */
