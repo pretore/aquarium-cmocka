@@ -311,3 +311,27 @@ int cmocka_test_pthread_cond_signal(pthread_cond_t *cond,
     return func(cond);
 }
 
+_Thread_local bool pthread_create_is_overridden = false;
+
+int cmocka_test_pthread_create(pthread_t *restrict thread,
+                               const pthread_attr_t *restrict attr,
+                               void *(*start_routine)(void *),
+                               void *restrict arg,
+                               const char *file, int line) {
+    assert_non_null(thread);
+    assert_non_null(start_routine);
+    assert_ptr_not_equal(thread, attr);
+    assert_ptr_not_equal(thread, arg);
+    if (pthread_create_is_overridden) {
+        return mock();
+    }
+    static int (*func)(pthread_t *,
+                       const pthread_attr_t *,
+                       void *(*)(void *),
+                       void *) = NULL;
+    if (!func) {
+        func = dlsym(RTLD_NEXT, u8"pthread_create");
+        assert_non_null(func);
+    }
+    return func(thread, attr, start_routine, arg);
+}

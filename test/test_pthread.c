@@ -368,6 +368,33 @@ static void check_cond_signal(void **state) {
     assert_int_equal(pthread_cond_destroy(&cond), 0);
 }
 
+static uintmax_t random_check;
+
+static void *create_routine(void *a) {
+    assert_null(a);
+    srand(time(NULL));
+    return (void *) (uintptr_t) (random_check = rand() % UINTMAX_MAX);
+}
+
+static void check_create(void **state) {
+    pthread_t thread;
+    pthread_create_is_overridden = true;
+    const int error[] = {
+            EAGAIN, EINVAL, EPERM
+    };
+    const uintmax_t limit = sizeof(error) / sizeof(int);
+    for (uintmax_t i = 0; i < limit; i++) {
+        will_return(cmocka_test_pthread_create, error[i]);
+        assert_int_equal(pthread_create(&thread, NULL, create_routine, NULL),
+                         error[i]);
+    }
+    pthread_create_is_overridden = false;
+    assert_int_equal(pthread_create(&thread, NULL, create_routine, NULL), 0);
+    void *check;
+    assert_int_equal(pthread_join(thread, &check), 0);
+    assert_int_equal((uintptr_t) check, random_check);
+}
+
 int main(int argc, char *argv[]) {
     const struct CMUnitTest tests[] = {
             cmocka_unit_test(check_mutex_init),
@@ -388,6 +415,7 @@ int main(int argc, char *argv[]) {
             cmocka_unit_test(check_cond_timedwait),
             cmocka_unit_test(check_cond_broadcast),
             cmocka_unit_test(check_cond_signal),
+            cmocka_unit_test(check_create),
     };
     //cmocka_set_message_output(CM_OUTPUT_XML);
     return cmocka_run_group_tests(tests, NULL, NULL);

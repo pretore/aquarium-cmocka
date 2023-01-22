@@ -142,5 +142,16 @@ int cmocka_test_pthread_cond_signal(pthread_cond_t *cond,
     cmocka_test_pthread_cond_signal(cond, __FILE__, __LINE__)
 extern _Thread_local bool pthread_cond_signal_is_overridden;
 
+int cmocka_test_pthread_create(pthread_t *restrict thread,
+                               const pthread_attr_t *restrict attr,
+                               void *(*start_routine)(void *),
+                               void *restrict arg,
+                               const char *file, int line);
+
+#define pthread_create(thread, attr, start_routine, arg) \
+    cmocka_test_pthread_create(thread, attr, start_routine, arg, \
+    __FILE__, __LINE__)
+extern _Thread_local bool pthread_create_is_overridden;
+
 #endif /* TEST */
 #endif /* _CMOCKA_TEST_CMOCKA_PTHREAD_H_ */
