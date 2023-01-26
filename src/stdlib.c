@@ -3,8 +3,11 @@
 #include <setjmp.h>
 #include <cmocka.h>
 #include <errno.h>
+#include <pthread.h>
 
 #include <test/cmocka/stdlib.h>
+
+static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 _Thread_local bool malloc_is_overridden = false;
 
@@ -12,7 +15,10 @@ void *cmocka_test_malloc(const size_t size, const char *file, const int line) {
     if (malloc_is_overridden) {
         return NULL;
     }
-    return _test_malloc(size, file, line);
+    assert_int_equal(pthread_mutex_lock(&mutex), 0);
+    void *result = _test_malloc(size, file, line);
+    assert_int_equal(pthread_mutex_unlock(&mutex), 0);
+    return result;
 }
 
 _Thread_local bool calloc_is_overridden = false;
@@ -22,7 +28,10 @@ void *cmocka_test_calloc(const size_t nmemb, const size_t size,
     if (calloc_is_overridden) {
         return NULL;
     }
-    return _test_calloc(nmemb, size, file, line);
+    assert_int_equal(pthread_mutex_lock(&mutex), 0);
+    void *result = _test_calloc(nmemb, size, file, line);
+    assert_int_equal(pthread_mutex_unlock(&mutex), 0);
+    return result;
 }
 
 _Thread_local bool realloc_is_overridden = false;
@@ -32,11 +41,16 @@ void *cmocka_test_realloc(void *ptr, const size_t size, const char *file,
     if (realloc_is_overridden) {
         return NULL;
     }
-    return _test_realloc(ptr, size, file, line);
+    assert_int_equal(pthread_mutex_lock(&mutex), 0);
+    void *result = _test_realloc(ptr, size, file, line);
+    assert_int_equal(pthread_mutex_unlock(&mutex), 0);
+    return result;
 }
 
 void cmocka_test_free(void *ptr, const char *file, const int line) {
+    assert_int_equal(pthread_mutex_lock(&mutex), 0);
     _test_free(ptr, file, line);
+    assert_int_equal(pthread_mutex_unlock(&mutex), 0);
 }
 
 #undef abort
@@ -73,7 +87,9 @@ int cmocka_test_posix_memalign(void **const out,
     if (posix_memalign_is_overridden) {
         return ENOMEM;
     }
+    assert_int_equal(pthread_mutex_lock(&mutex), 0);
     void *const ptr = _test_malloc(size, file, line);
+    assert_int_equal(pthread_mutex_unlock(&mutex), 0);
     if (!ptr) {
         return ENOMEM;
     }
