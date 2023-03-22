@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(aquarium-cmocka VERSION 1.5.1
+project(aquarium-cmocka VERSION 1.5.2
         LANGUAGES C
         DESCRIPTION "aquarium test harness")
 
@@ -43,7 +43,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_link_libraries(${PROJECT_NAME}
             PUBLIC
                 ${CMAKE_THREAD_LIBS_INIT}
-                ${CMOCKA_SHARED_LIBRARY})
+                cmocka::cmocka)
     target_include_directories(${PROJECT_NAME}
             PUBLIC
                 "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
